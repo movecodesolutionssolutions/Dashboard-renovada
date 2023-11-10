@@ -7,8 +7,7 @@ import User from "../Pages/Users";
 import Header from "../components/Header";
 
 const Private = ({ Item }) => {
-  // Aqui você pode verificar a autenticação do usuário
-  const isAuthenticated = true; // Defina sua lógica de autenticação
+  const isAuthenticated = true; 
 
   return isAuthenticated ? <Item /> : <Login />;
 };
