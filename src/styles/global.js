@@ -4,8 +4,7 @@ import styled, { createGlobalStyle, css, keyframes } from "styled-components";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 // import { headShake } from "react-animations";
-// import "react-perfect-scrollbar/dist/css/styles.css";
-// import "react-toastify/dist/ReactToastify.css";
+
 
 import { device } from "./mediaQuery";
 
