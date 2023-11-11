@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { HeaderContainer, HamburgerButton } from "./styles";
 import { FaBars, FaTimes } from "react-icons/fa";
 import HamburgerMenu from "../Menu";
+import { AuthContext } from "../../context/auth";
 
 const Header = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const { user } = useContext(AuthContext);
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -14,11 +16,11 @@ const Header = () => {
     <HeaderContainer>
       <HamburgerButton onClick={toggleMenu}>
         {isOpen ? <FaTimes /> : <FaBars />}{" "}
-        {/* Altera o ícone com base no estado isOpen */}
       </HamburgerButton>
       <HamburgerMenu isOpen={isOpen} toggleMenu={toggleMenu} />
-      <h1>Usuario Logado</h1>
+
       <h1>Logo</h1>
+      <h1>Usuário: {user.name}</h1>
     </HeaderContainer>
   );
 };

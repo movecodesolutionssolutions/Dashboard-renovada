@@ -1,31 +1,38 @@
-import { Fragment } from "react";
-import { BrowserRouter, Route, Routes } from "react-router-dom";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router-dom";
 
 import Login from "../Pages/Login/index";
 import Registre from "../Pages/Registre-se/index";
+import Recovery from "../Pages/Recovery";
 import User from "../Pages/Users";
 import Header from "../components/Header";
+import { PrivateRoute } from "./privateRoutes";
 
-const Private = ({ Item }) => {
-  // Aqui você pode verificar a autenticação do usuário
-  const isAuthenticated = true; // Defina sua lógica de autenticação
+const HeaderWrapper = () => {
+  const location = useLocation();
 
-  return isAuthenticated ? <Item /> : <Login />;
+  const routesWithoutHeader = ["/", "/signup", "/recocery"];
+
+  if (routesWithoutHeader.includes(location.pathname)) {
+    return null;
+  }
+
+  return <Header />;
 };
 
 const RoutesApp = () => {
   return (
     <BrowserRouter>
-      <Header />
-      <Fragment>
-        <Routes>
-          <Route exact path="/Users" element={<Private Item={User} />} />
-          <Route path="/" element={<Login />} />
-          <Route exact path="/signup" element={<Registre />} />
-          <Route path="*" element={<Login />} />
-        </Routes>
-      </Fragment>
+      <HeaderWrapper />
+      <Routes>
+        <Route path="/" element={<Login />} />
+        <Route exact path="/signup" element={<Registre />} />
+        <Route exact path="/recocery" element={<Recovery />} />
+        <Route path="/Users" element={<PrivateRoute />}>
+          <Route exact path="/Users" element={<User />} />
+        </Route>
+      </Routes>
     </BrowserRouter>
   );
 };
+
 export default RoutesApp;

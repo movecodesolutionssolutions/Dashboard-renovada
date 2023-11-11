@@ -1,6 +1,7 @@
 import styled, { createGlobalStyle, css, keyframes } from "styled-components";
 // import { lighten } from "polished";
 // import PerfectScrollbar from "react-perfect-scrollbar";
+import "react-toastify/dist/ReactToastify.css";
 import Select from "react-select";
 import AsyncSelect from "react-select/async";
 // import { headShake } from "react-animations";
