@@ -1,11 +1,16 @@
 import GlobalStyle from "./styles/global.js";
 import RoutesApp from "./routes/index.js";
+import { ToastContainer } from "react-toastify";
+import { AuthProvider } from "./context/auth.js";
 
 function App() {
   return (
     <>
-      <GlobalStyle />
-      <RoutesApp />
+      <AuthProvider>
+        <GlobalStyle />
+        <ToastContainer autoClose={3000} />
+        <RoutesApp />
+      </AuthProvider>
     </>
   );
 }
