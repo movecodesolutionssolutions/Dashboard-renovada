@@ -5,39 +5,54 @@ import * as C from "./styles";
 import { Form } from "@unform/web";
 import { Link } from "react-router-dom";
 import DateInput from "../../components/DatePicker";
-import moment from "moment";
+import FormSelect from "../../components/FormSelect";
 
 const Registre = () => {
-  const [dataNasc, setDatanasc] = useState(new Date());
+  const [dataDoEvento, setDataDoEvento] = useState("");
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const options = [
+    { value: "M", label: "Masculino" },
+    { value: "F", label: "Feminino" },
+  ];
+
+  const handleDataChange = (event) => {
+    setDataDoEvento(event.target.value);
+  };
 
   const formRefRegister = useRef(null);
 
-  const handleDateChange = (date) => {
-    // Faça algo com a data selecionada, se necessário
+  const handleRegister = (date) => {
     console.log("Data selecionada:", date);
   };
   return (
-    <Form ref={formRefRegister}>
+    <Form ref={formRefRegister} onSubmit={handleRegister}>
       <C.Container>
         <C.Label>IGREJA RENOVADA</C.Label>
 
         <C.Content>
-          <Input type="email" placeholder="Digite seu e-mail" name="email1" />
-          <Input type="email" placeholder="Nome" name="name" />
-          <Input
-            type="password"
-            placeholder="Digite sua Senha"
-            name="password"
-          />
+          <Input type="email" label="Digite seu e-mail:" name="email1" />
+          <Input type="email" label="Nome:" name="name" />
+          <Input type="password" name="password" label="Digite sua Senha:" />
           <DateInput
-            label="Data de nascimento"
-            onChange={handleDateChange}
-            selectedDate={dataNasc}
+            label="Data de nascimento:"
+            id="data-do-evento"
+            value={dataDoEvento}
+            onChange={handleDataChange}
           />
-          <Input type="email" placeholder="Genero" name="gender" />
-          <Input type="email" placeholder="Papeis" name="roles" />
+          <FormSelect
+            name="gender"
+            label="Escolha seu genero:"
+            options={options}
+            value={selectedOption}
+            onChange={(value) => setSelectedOption(value)}
+          />
+          <Input type="email" label="Papeis:" name="roles" />
 
-          <Button Text="Inscrever-se" />
+          <Button
+            Text="Inscrever-se"
+            onClick={() => formRefRegister.current.submitForm()}
+          />
           <C.LabelSignin>
             Já tem uma conta?
             <C.Strong>

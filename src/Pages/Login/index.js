@@ -50,14 +50,10 @@ export default function Login() {
             <C.Label>IGREJA RENOVADA</C.Label>
 
             <C.Content>
-              <Input
-                type="email"
-                placeholder="Digite seu e-mail"
-                name="email"
-              />
+              <Input type="email" label="Digite seu e-mail:" name="email" />
               <Input
                 type="password"
-                placeholder="Digite sua senha"
+                label="Digite sua senha:"
                 name="password"
               />
 

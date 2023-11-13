@@ -22,21 +22,20 @@ const HeaderWrapper = () => {
 
 const RoutesApp = () => {
     return (
-        <BrowserRouter>
-            <HeaderWrapper />
-            <Routes>
-                <Route path="/" element={<Login />} />
-                <Route exact path="/signup" element={<Registre />} />
-                <Route exact path="/recocery" element={<Recovery />} />
-                <Route path="/Users" element={<PrivateRoute />}>
-                    <Route exact path="/Users" element={<User />} />
-                </Route>
-
-                <Route path="/eventos/listar" element={<PrivateRoute />}>
-                    <Route exact path="/eventos/listar" element={<EventsList />} />
-                </Route>
-            </Routes>
-        </BrowserRouter>
+      <BrowserRouter>
+        <HeaderWrapper />
+        <Routes>
+          <Route path="/" element={<Login />} />
+          <Route exact path="/signup" element={<Registre />} />
+          <Route exact path="/recocery" element={<Recovery />} />
+          <Route path="/Users" element={<PrivateRoute />}>
+            <Route exact path="/Users" element={<User />} />
+          </Route>
+          <Route path="/eventos/listar" element={<PrivateRoute />}>
+            <Route exact path="/eventos/listar" element={<EventsList />} />
+          </Route>
+        </Routes>
+      </BrowserRouter>
     );
 };
 
