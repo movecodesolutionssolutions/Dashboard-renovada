@@ -20,7 +20,7 @@ const Header = () => {
       <HamburgerMenu isOpen={isOpen} toggleMenu={toggleMenu} />
 
       <h1>Logo</h1>
-      <h1>Usuário: {user.name}</h1>
+
     </HeaderContainer>
   );
 };
