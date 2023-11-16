@@ -1,26 +1,12 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import EventCard from "../../../components/Eventos/EventCard";
 import { api } from "../../../services/api.js"
 
 
-const events = [
-  {
-    title: "Evento 1",
-    date: "10 de Novembro, 2023",
-    address: "Rua Exemplo, 123",
-    description: "Descrição do Evento 1",
-  },
-  {
-    title: "Evento 2",
-    date: "15 de Novembro, 2023",
-    address: "Avenida Teste, 456",
-    description: "Descrição do Evento 2",
-  },
-  // Adicione mais eventos conforme necessário
-];
-
 export default function EventsList() {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+    const [events, setEvents] = useState([]);
+
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -38,10 +24,18 @@ export default function EventsList() {
     handleCloseModal();
   };
 
-  const hendleGetEvents = async () => {
-    const response = await api.get("/event");
-    console.log(response);
+  const handleGetEvents = async () => {
+    try {
+      const response = await api.get("/event");
+      setEvents(response.data.events);
+    } catch (error) {
+      console.error("Error fetching events:", error);
+    }
   };
+
+  useEffect(() => {
+    handleGetEvents(); // Fetch events when the component mounts
+  }, []);
 
   return (
     <>
@@ -53,14 +47,11 @@ export default function EventsList() {
         }}
       >
         <button onClick={handleOpenModal}>Adicionar Evento</button>
-        <button className="mt-5" onClick={hendleGetEvents}>
-          listar
-        </button>
       </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px" }}>
-            {events.map((event, index) => (
-                <EventCard key={index} {...event} />
+            {events.map((event) => (
+                <EventCard key={event.id} {...event} />
             ))}
         </div>
 
