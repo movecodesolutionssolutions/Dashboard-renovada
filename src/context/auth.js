@@ -32,7 +32,6 @@ export const AuthProvider = ({ children }) => {
         api.defaults.headers.common[
           "Authorization"
         ] = `Bearer ${response.data.token}`;
-
         setUser(response.data.user);
         localStorage.setItem("@Auth:token", response.data.token);
         localStorage.setItem("@Auth:user", JSON.stringify(response.data.user));
@@ -45,6 +44,7 @@ export const AuthProvider = ({ children }) => {
       }
     }
   };
+
   return (
     <AuthContext.Provider value={{ user, signed: !!user, signIn }}>
       {children}

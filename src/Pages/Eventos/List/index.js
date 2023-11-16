@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import EventCard from "../../../components/Eventos/EventCard";
+import { api } from "../../../services/api";
 
 const events = [
   {
@@ -19,6 +20,7 @@ const events = [
 
 export default function EventsList() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [listEvents, setListEvents] = useState([]);
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -36,6 +38,16 @@ export default function EventsList() {
     handleCloseModal();
   };
 
+  const hendleGetEvents = async () => {
+    try {
+      const response = await api.get("/event");
+      setListEvents(response.data); // Atualiza o estado com os eventos da API
+    } catch (error) {
+      console.error("Erro ao buscar eventos:", error);
+    }
+  };
+
+  console.log("Eventos", listEvents.events);
   return (
     <>
       <div
@@ -197,8 +209,12 @@ export default function EventsList() {
                 </div>
               </div>
             </form>
+
             <button class="mt-5" onClick={handleCloseModal}>
               Fechar
+            </button>
+            <button class="mt-5" onClick={hendleGetEvents}>
+              TESTE
             </button>
           </div>
         </div>

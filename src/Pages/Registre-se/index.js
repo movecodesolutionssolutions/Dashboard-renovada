@@ -6,14 +6,16 @@ import { Form } from "@unform/web";
 import { Link } from "react-router-dom";
 import DateInput from "../../components/DatePicker";
 import FormSelect from "../../components/FormSelect";
+import { toast } from "react-toastify";
+import { api } from "../../services/api";
 
 const Registre = () => {
   const [dataDoEvento, setDataDoEvento] = useState("");
   const [selectedOption, setSelectedOption] = useState(null);
 
   const options = [
-    { value: "M", label: "Masculino" },
-    { value: "F", label: "Feminino" },
+    { value: "male", label: "Masculino" },
+    { value: "feminine", label: "Feminino" },
   ];
 
   const handleDataChange = (event) => {
@@ -22,8 +24,21 @@ const Registre = () => {
 
   const formRefRegister = useRef(null);
 
-  const handleRegister = (date) => {
-    console.log("Data selecionada:", date);
+  const handleRegister = async (formData) => {
+    try {
+      const response = await api.post("/auth/register", {
+        email: formData.email,
+        name: formData.name,
+        password: formData.password,
+        birthday: dataDoEvento,
+        gender: formData.gender,
+        roles: "user",
+      });
+      toast.success("Usuário cadastrado com sucesso!");
+    } catch (err) {
+      toast.error("Ocorreu um erro ao criar usuáro. Motivo" + err);
+    } finally {
+    }
   };
   return (
     <Form ref={formRefRegister} onSubmit={handleRegister}>
@@ -31,8 +46,8 @@ const Registre = () => {
         <C.Label>IGREJA RENOVADA</C.Label>
 
         <C.Content>
-          <Input type="email" label="Digite seu e-mail:" name="email1" />
-          <Input type="email" label="Nome:" name="name" />
+          <Input type="email" label="Digite seu e-mail:" name="email" />
+          <Input type="text" label="Nome:" name="name" />
           <Input type="password" name="password" label="Digite sua Senha:" />
           <DateInput
             label="Data de nascimento:"
@@ -47,7 +62,6 @@ const Registre = () => {
             value={selectedOption}
             onChange={(value) => setSelectedOption(value)}
           />
-          <Input type="email" label="Papeis:" name="roles" />
 
           <Button
             Text="Inscrever-se"
