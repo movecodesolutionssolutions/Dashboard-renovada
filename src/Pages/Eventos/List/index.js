@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import EventCard from "../../../components/Eventos/EventCard";
+import { api } from "../../../services/api.js"
+
 
 const events = [
   {
@@ -36,6 +38,11 @@ export default function EventsList() {
     handleCloseModal();
   };
 
+  const hendleGetEvents = async () => {
+    const response = await api.get("/event");
+    console.log(response);
+  };
+
   return (
     <>
       <div
@@ -46,13 +53,16 @@ export default function EventsList() {
         }}
       >
         <button onClick={handleOpenModal}>Adicionar Evento</button>
+        <button className="mt-5" onClick={hendleGetEvents}>
+          listar
+        </button>
       </div>
 
-      <div style={{ maxHeight: "calc(100vh - 20px)", overflowY: "auto" }}>
-        {events.map((event, index) => (
-          <EventCard key={index} {...event} />
-        ))}
-      </div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px" }}>
+            {events.map((event, index) => (
+                <EventCard key={index} {...event} />
+            ))}
+        </div>
 
       {isModalOpen && (
         <div

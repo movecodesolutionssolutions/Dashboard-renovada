@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
 import Modal from 'react-modal';
 import WorshipImage from '../../../images/eventos/worship.jpeg';
+import EventModal from "../EventModal";
 
 const CardContainer = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
-  margin: 16px;
   padding: 16px;
+  margin:20px;
   width: 300px;
 `;
 
@@ -27,24 +28,11 @@ const EventAddress = styled.p`
 const EventDescription = styled.p``;
 
 const CardsContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-
-const EventModal = styled(Modal)`
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  max-width: 1000px; /* Defina o tamanho máximo desejado para o modal */
-  width: 100%;
-  height: 70%;
-  padding: 20px;
-  border: 1px solid #ddd;
-  background-color: #fff;
-  outline: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Define a largura mínima e máxima para as colunas */
+  gap: 10px; /* Espaço entre os cards */
+  justify-content: center; /* Centraliza os cards horizontalmente */
+  align-items: center; /* Centraliza os cards verticalmente */
 `;
 
 const ViewMoreButton = styled.button`
@@ -59,7 +47,7 @@ const ViewMoreButton = styled.button`
   cursor: pointer;
 `;
 
-const EventCard = ({ title, date, address, description }) => {
+const EventCard = ({title, date, address, description}) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {
@@ -74,14 +62,16 @@ const EventCard = ({ title, date, address, description }) => {
         <CardsContainer>
             <CardContainer>
                 <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                    <img className="w-full" src={WorshipImage} alt="Sunset in the mountains" />
+                    <img className="w-full" src={WorshipImage} alt="Sunset in the mountains"/>
                     <div className="px-6 py-4">
                         <div className="font-bold text-xl mb-2">{title}</div>
                         <p className="text-gray-700 text-base">{description}</p>
                     </div>
                     <div className="px-6 pt-4 pb-2">
-                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{date}</span>
-                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{address}</span>
+                            <span
+                                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{date}</span>
+                        <span
+                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{address}</span>
                         <button onClick={openModal}>Ver Mais</button>
                     </div>
                 </div>
@@ -90,16 +80,11 @@ const EventCard = ({ title, date, address, description }) => {
             <EventModal
                 isOpen={modalIsOpen}
                 onRequestClose={closeModal}
-                contentLabel="Event Details"
-            >
-                <div>
-                    <EventTitle>{title}</EventTitle>
-                    <EventDate>{date}</EventDate>
-                    <EventAddress>{address}</EventAddress>
-                    <EventDescription>{description}</EventDescription>
-                    <button onClick={closeModal}>Fechar</button>
-                </div>
-            </EventModal>
+                title={title}
+                date={date}
+                address={address}
+                description={description}
+            />
         </CardsContainer>
     );
 };
