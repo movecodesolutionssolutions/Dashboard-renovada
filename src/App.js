@@ -1,7 +1,7 @@
 import GlobalStyle from "./styles/global.js";
-import RoutesApp from "./routes/index.js";
+import Routes from "./routes/index.jsx";
 import { ToastContainer } from "react-toastify";
-import { AuthProvider } from "./context/auth.js";
+import { AuthProvider } from "./context/auth.jsx";
 
 function App() {
   return (
@@ -9,7 +9,7 @@ function App() {
       <AuthProvider>
         <GlobalStyle />
         <ToastContainer autoClose={3000} />
-        <RoutesApp />
+        <Routes />
       </AuthProvider>
     </>
   );

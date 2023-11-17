@@ -1,17 +1,22 @@
-import React, { useContext, useRef, useState } from "react";
-import { Link, Navigate } from "react-router-dom";
+import React, { useRef, useState } from "react";
+
 import Input from "../../components/Input";
 import Button from "../../components/Button";
 import * as C from "./styles";
 import { Form } from "@unform/web";
-import { AuthContext } from "../../context/auth";
+import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
+import { useHistory } from "react-router-dom";
 
 export default function Login() {
-  const { signIn, signed } = useContext(AuthContext);
+  const { signIn, userLogged } = useAuth();
   const [loading, setLoading] = useState(false);
+  const history = useHistory();
   const formRefLogin = useRef(null);
 
+  if (userLogged()) {
+    history.push("/users");
+  }
   const toastOptions = {
     autoClose: 4000,
     position: toast.POSITION.TOP_CENTER,
@@ -26,7 +31,6 @@ export default function Login() {
     if (!emailRegex.test(email)) {
       toast.info("Por favor, insira um e-mail válido.", toastOptions);
       setLoading(false);
-      return;
     }
     const data = {
       email,
@@ -34,49 +38,43 @@ export default function Login() {
     };
     try {
       await signIn(data);
+      history.push("/users");
     } catch (error) {
       toast.info("Falha no login. Verifique suas credenciais.", toastOptions);
     } finally {
       setLoading(false);
     }
   };
-  if (signed) {
-    return <Navigate to="/Users" />;
-  } else {
-    return (
-      <>
-        <Form ref={formRefLogin} onSubmit={handleSignIn}>
-          <C.Container>
-            <C.Label>IGREJA RENOVADA</C.Label>
 
-            <C.Content>
-              <Input type="email" label="Digite seu e-mail:" name="email" />
-              <Input
-                type="password"
-                label="Digite sua senha:"
-                name="password"
-              />
+  return (
+    <>
+      <Form ref={formRefLogin} onSubmit={handleSignIn}>
+        <C.Container>
+          <C.Label>IGREJA RENOVADA</C.Label>
 
-              <Button
-                Text={loading ? "Carregando..." : "Entrar"}
-                onClick={() => formRefLogin.current.submitForm()}
-              />
+          <C.Content>
+            <Input type="email" label="Digite seu e-mail:" name="email" />
+            <Input type="password" label="Digite sua senha:" name="password" />
 
-              <C.LabelSignup>
-                Não tem uma conta?
-                <C.Strong>
-                  <Link to="/signup">&nbsp;Registre-se</Link>
-                </C.Strong>
-              </C.LabelSignup>
-              <C.LabelSignup>
-                <C.Strong>
-                  <Link to="/recocery">Esqueceu sua senha ?</Link>
-                </C.Strong>
-              </C.LabelSignup>
-            </C.Content>
-          </C.Container>
-        </Form>
-      </>
-    );
-  }
+            <Button
+              Text={loading ? "Carregando..." : "Entrar"}
+              onClick={() => formRefLogin.current.submitForm()}
+            />
+
+            {/* <C.LabelSignup>
+              Não tem uma conta?
+              <C.Strong>
+                <Link to="/signup">&nbsp;Registre-se</Link>
+              </C.Strong>
+            </C.LabelSignup>
+            <C.LabelSignup>
+              <C.Strong>
+                <Link to="/recocery">Esqueceu sua senha ?</Link>
+              </C.Strong>
+            </C.LabelSignup> */}
+          </C.Content>
+        </C.Container>
+      </Form>
+    </>
+  );
 }

@@ -7,20 +7,13 @@ import {
   MenuItem,
   Icon,
 } from "./styles";
-import { useRoutes, Outlet } from "react-router-dom";
+
 import { FaTimes, FaUser, FaCalendar, FaTh } from "react-icons/fa";
 
 const HamburgerMenu = ({ isOpen, toggleMenu }) => {
-  const routes = useRoutes([
-    {
-      path: "/signup",
-      element: null,
-    },
-  ]);
-
   const closeMenu = () => {
     if (isOpen) {
-      toggleMenu(); // Fecha o menu quando o ícone é clicado
+      toggleMenu();
     }
   };
 
@@ -50,7 +43,6 @@ const HamburgerMenu = ({ isOpen, toggleMenu }) => {
             Celulas
           </MenuItem>
         </MenuItems>
-        {routes}
       </MenuContainer>
     </>
   );

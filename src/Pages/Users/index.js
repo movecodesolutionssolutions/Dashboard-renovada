@@ -1,8 +1,8 @@
 import React from "react";
-import { Link, Navigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { api } from "../../services/api";
 
-export default function User() {
+const User = () => {
   const teste = async () => {
     const response = await api.get("/user");
     console.log(response);
@@ -10,8 +10,9 @@ export default function User() {
   return (
     <>
       <h1>User</h1>
-      <Link to="/eventos/listar">Eventos</Link>
+      <Link to="/events/list">Eventos</Link>
       <button onClick={teste}>TESTE</button>
     </>
   );
-}
+};
+export default User;
