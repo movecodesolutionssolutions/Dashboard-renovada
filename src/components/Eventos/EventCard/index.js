@@ -8,7 +8,7 @@ const CardContainer = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
-  margin:20px;
+  margin:10px;
   width: 300px;
 `;
 
@@ -30,7 +30,6 @@ const EventDescription = styled.p``;
 const CardsContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* Define a largura mínima e máxima para as colunas */
-  gap: 10px; /* Espaço entre os cards */
   justify-content: center; /* Centraliza os cards horizontalmente */
   align-items: center; /* Centraliza os cards verticalmente */
 `;
@@ -47,7 +46,7 @@ const ViewMoreButton = styled.button`
   cursor: pointer;
 `;
 
-const EventCard = ({ title, date, address, content, img,isRequiredSubscription, labelDate, maxRegistered, price }) => {
+const EventCard = ({ title, videoUrl, address, content, img,isRequiredSubscription, labelDate, maxRegistered, price }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {
@@ -58,11 +57,13 @@ const EventCard = ({ title, date, address, content, img,isRequiredSubscription, 
         setModalIsOpen(false);
     };
 
+    const displayImage = img && img.url ? img.url : WorshipImage;
+
     return (
         <CardsContainer>
             <CardContainer>
                 <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                    <img className="w-full" src={img.url} alt={title} />
+                    <img className="w-full" src={displayImage} alt={title} />
                     <div className="px-6 py-4">
                         <div className="font-bold text-xl mb-2">{title}</div>
                         <p className="text-gray-700 text-base overflow-hidden line-clamp-3">{content}</p>
@@ -74,7 +75,7 @@ const EventCard = ({ title, date, address, content, img,isRequiredSubscription, 
                         <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
               {address}
             </span>
-                        <button onClick={openModal}>Ver Mais</button>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openModal}>Ver Mais</button>
                     </div>
                 </div>
             </CardContainer>
@@ -88,6 +89,7 @@ const EventCard = ({ title, date, address, content, img,isRequiredSubscription, 
                 description={content}
                 img={img}
                 isRequiredSubscription={isRequiredSubscription}
+                videoUrl = {videoUrl}
             />
         </CardsContainer>
     );

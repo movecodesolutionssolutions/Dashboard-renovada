@@ -42,7 +42,16 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
-const EventModal = ({ isOpen, onRequestClose, title, labelDate, address, description, users, img, isRequiredSubscription }) => {
+const EventModal = ({ isOpen, onRequestClose, title, videoUrl, labelDate, address, description, users, img, isRequiredSubscription }) => {
+    // Função para extrair o ID do vídeo do formato de URL do YouTube
+    const extractYouTubeVideoId = (url) => {
+        const match = url.match(/(?:https?:\/\/)?(?:www\.)?(?:youtube\.com\/(?:[^\/\n\s]+\/\S+\/|(?:v|e(?:mbed)?)\/|\S*?[?&]v=)|youtu\.be\/)([a-zA-Z0-9_-]{11})/);
+        return match && match[1] ? match[1] : null;
+    };
+
+    // Extrair o ID do vídeo
+    const videoId = videoUrl ? extractYouTubeVideoId(videoUrl) : null;
+
     return (
         <ModalContainer
             isOpen={isOpen}
@@ -72,17 +81,22 @@ const EventModal = ({ isOpen, onRequestClose, title, labelDate, address, descrip
                                 </>
                             )}
                         </p>
+                        <p>{videoUrl}</p>
                         <EventTitle className="text-gray-900 font-bold text-xl mb-2">{title}</EventTitle>
                         <EventDescription className="text-gray-700 text-base">{description}</EventDescription>
-                        <iframe
-                            width="100%"
-                            height="315"
-                            src="https://www.youtube.com/embed/1OcJvoojOJQ"
-                            title="YouTube video player"
-                            frameBorder="0"
-                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                            allowFullScreen
-                        ></iframe>
+                        {videoUrl ? (
+                            <iframe
+                                width="100%"
+                                height="315"
+                                src={`https://www.youtube.com/embed/${videoId}`}
+                                title="YouTube video player"
+                                frameBorder="0"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowFullScreen
+                            ></iframe>
+                        ) : (
+                            <p>Nenhum vídeo cadastrado para este evento.</p>
+                        )}
                         <Registereds users={users} />
 
                     </div>

@@ -5,7 +5,18 @@ import { api } from "../../../services/api.js"
 
 export default function EventsList() {
     const [events, setEvents] = useState([]);
-
+    const [formData, setFormData] = useState({
+        title: "",
+        content: "",
+        labelDate: "",
+        address: "",
+        date: "",
+        isRequiredSubscription: false,
+        maxRegistered: 0,
+        isHighlighted: false,
+        imgId: "",
+        videoUrl: "",
+    });
     const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleOpenModal = () => {
@@ -14,14 +25,6 @@ export default function EventsList() {
 
   const handleCloseModal = () => {
     setIsModalOpen(false);
-  };
-
-  const handleAddEvent = (newEvent) => {
-    // Lógica para adicionar o novo evento à lista de eventos
-    // Pode usar setState para atualizar a lista de eventos
-    // e também fechar o modal
-    // Exemplo: setEvents([...events, newEvent]);
-    handleCloseModal();
   };
 
   const handleGetEvents = async () => {
@@ -37,7 +40,54 @@ export default function EventsList() {
     handleGetEvents(); // Fetch events when the component mounts
   }, []);
 
-  return (
+    const handleAddEvent = async (newEvent) => {
+        try {
+            // Send a POST request to create a new event
+            await api.post("/event", newEvent);
+
+            // Fetch the updated list of events
+            handleGetEvents();
+
+            // Close the modal
+            handleCloseModal();
+        } catch (error) {
+            console.error("Error adding event:", error);
+        }
+    };
+
+      const handleSubmit = (event) => {
+        event.preventDefault();
+
+        // Gather data from the form
+        const newFormData = new FormData(event.target);
+        const newEvent = {
+            title: newFormData.get("title"),
+            content: newFormData.get("content"),
+            labelDate: newFormData.get("labelDate"),
+            address: newFormData.get("address"),
+            date: newFormData.get("date"),
+            isRequiredSubscription: newFormData.get("isRequiredSubscription") === "true",
+            maxRegistered: parseInt(newFormData.get("maxRegistered"), 10),
+            isHighlighted: newFormData.get("isHighlighted") === "true",
+            imgId: newFormData.get("imgId"),
+            videoUrl: newFormData.get("videoUrl"),
+        };
+
+        // Call the handleAddEvent function with the newEvent data
+        handleAddEvent(newEvent);
+    };
+
+    const handleChange = (e) => {
+        const { name, value, type, checked } = e.target;
+
+        setFormData((prevData) => ({
+            ...prevData,
+            [name]: type === "checkbox" ? checked : value,
+        }));
+    };
+
+
+    return (
     <>
       <div
         style={{
@@ -46,7 +96,7 @@ export default function EventsList() {
           marginBottom: "10px",
         }}
       >
-        <button onClick={handleOpenModal}>Adicionar Evento</button>
+        <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenModal}>Adicionar Evento</button>
       </div>
 
         <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px" }}>
@@ -72,132 +122,74 @@ export default function EventsList() {
           <div
             style={{ background: "#fff", padding: "20px", borderRadius: "8px" }}
           >
-            <form class="w-full max-w-lg">
-              <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full md:w-full px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-first-name"
-                  >
-                    Nome do Evento:
+              <form onSubmit={handleSubmit}>
+                  <label>
+                      Title:
+                      <input type="text" name="title" value={formData.title} onChange={handleChange} required />
                   </label>
-                  <input
-                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                    id="grid-first-name"
-                    type="text"
-                    placeholder="Nome do Evento"
-                  ></input>
-                </div>
-              </div>
-              <div class="flex flex-wrap -mx-3 mb-6">
-                <div class="w-full px-3">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-password"
-                  >
-                    Descrição do Evento
+
+                  <label>
+                      Content:
+                      <textarea name="content" value={formData.content} onChange={handleChange} required />
                   </label>
-                  <textarea
-                    id="message"
-                    rows="4"
-                    className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Escreva aqui..."
-                  ></textarea>
-                </div>
-              </div>
-              <label
-                className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                htmlFor="grid-password"
-              >
-                Endereço do Evento
-              </label>
-              <div class="flex flex-wrap -mx-3 mb-2">
-                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-city"
-                  >
-                    City
+
+                  <label>
+                      Label Date:
+                      <input type="text" name="labelDate" value={formData.labelDate} onChange={handleChange} />
                   </label>
-                  <input
-                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="grid-city"
-                    type="text"
-                    placeholder="Albuquerque"
-                  ></input>
-                </div>
-                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-state"
-                  >
-                    State
+
+                  <label>
+                      Address:
+                      <input type="text" name="address" value={formData.address} onChange={handleChange} />
                   </label>
-                  <div class="relative">
-                    <select
-                      class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                      id="grid-state"
-                    >
-                      <option>New Mexico</option>
-                      <option>Missouri</option>
-                      <option>Texas</option>
-                    </select>
-                    <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                      <svg
-                        class="fill-current h-4 w-4"
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 20 20"
-                      >
-                        <path d="M9.293 12.95l.707.707L15.657 8l-1.414-1.414L10 10.828 5.757 6.586 4.343 8z" />
-                      </svg>
-                    </div>
-                  </div>
-                </div>
-                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
-                  <label
-                    class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    for="grid-zip"
-                  >
-                    Zip
+
+                  <label>
+                      Date:
+                      <input type="text" name="date" value={formData.date} onChange={handleChange} />
                   </label>
-                  <input
-                    class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                    id="grid-zip"
-                    type="text"
-                    placeholder="90210"
-                  ></input>
-                </div>
-                <div className="w-full md:w-full px-3 mb-6 md:mb-0 my-6">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-first-name"
-                  >
-                    Data do Evento:
+
+                  <label>
+                      Is Required Subscription:
+                      <input
+                          type="checkbox"
+                          name="isRequiredSubscription"
+                          checked={formData.isRequiredSubscription}
+                          onChange={handleChange}
+                      />
                   </label>
-                  <input
-                    className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-700 rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-                    id="grid-first-name"
-                    type="date"
-                  ></input>
-                </div>
-                <div className="w-full md:w-full px-3 mb-6 md:mb-0 my-6">
-                  <label
-                    className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                    htmlFor="grid-first-name"
-                  >
-                    Tipo de Evento:
+
+                  <label>
+                      Max Registered:
+                      <input
+                          type="number"
+                          name="maxRegistered"
+                          value={formData.maxRegistered}
+                          onChange={handleChange}
+                      />
                   </label>
-                  <select
-                    id="countries"
-                    className="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                  >
-                    <option selected>Selecione</option>
-                    <option value="public">Público</option>
-                    <option value="private">Privado</option>
-                  </select>
-                </div>
-              </div>
-            </form>
+
+                  <label>
+                      Is Highlighted:
+                      <input
+                          type="checkbox"
+                          name="isHighlighted"
+                          checked={formData.isHighlighted}
+                          onChange={handleChange}
+                      />
+                  </label>
+
+                  <label>
+                      Image ID:
+                      <input type="text" name="imgId" value={formData.imgId} onChange={handleChange} />
+                  </label>
+
+                  <label>
+                      Video URL:
+                      <input type="text" name="videoUrl" value={formData.videoUrl} onChange={handleChange} />
+                  </label>
+
+                  <button type="submit">Submit</button>
+              </form>
             <button class="mt-5" onClick={handleCloseModal}>
               Fechar
             </button>
