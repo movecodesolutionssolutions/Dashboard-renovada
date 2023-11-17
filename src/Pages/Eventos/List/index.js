@@ -19,26 +19,26 @@ export default function EventsList() {
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);
-  };
+    const handleOpenModal = () => {
+        setIsModalOpen(true);
+    };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
+    const handleCloseModal = () => {
+        setIsModalOpen(false);
+    };
 
-  const handleGetEvents = async () => {
-    try {
-      const response = await api.get("/event");
-      setEvents(response.data.events);
-    } catch (error) {
-      console.error("Error fetching events:", error);
-    }
-  };
+    const handleGetEvents = async () => {
+        try {
+            const response = await api.get("/event");
+            setEvents(response.data.events);
+        } catch (error) {
+            console.error("Error fetching events:", error);
+        }
+    };
 
-  useEffect(() => {
-    handleGetEvents(); // Fetch events when the component mounts
-  }, []);
+    useEffect(() => {
+        handleGetEvents(); // Fetch events when the component mounts
+    }, []);
 
     const handleAddEvent = async (newEvent) => {
         try {
@@ -55,7 +55,7 @@ export default function EventsList() {
         }
     };
 
-      const handleSubmit = (event) => {
+    const handleSubmit = (event) => {
         event.preventDefault();
 
         // Gather data from the form
@@ -86,116 +86,149 @@ export default function EventsList() {
         }));
     };
 
+    const handleDeleteEvent = async (eventId) => {
+        try {
+            // Send a DELETE request to delete the event
+            await api.delete(`/event/${eventId}`);
+
+            // Fetch the updated list of events
+            handleGetEvents();
+        } catch (error) {
+            console.error(`Error deleting event with ID ${eventId}:`, error);
+        }
+    };
 
     return (
-    <>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-          marginBottom: "10px",
-        }}
-      >
-        <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenModal}>Adicionar Evento</button>
-      </div>
+        <>
+            <div
+                style={{
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: "10px",
+                }}
+            >
+                <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleOpenModal}>Adicionar Evento</button>
+            </div>
 
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px" }}>
-            {events.map((event) => (
-                <EventCard key={event.id} {...event} />
-            ))}
-        </div>
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px" }}>
+                {events.map((event) => (
+                    <div key={event.id}>
+                        <button className="bg-red-500 text-blue-50" onClick={() => handleDeleteEvent(event.id)}>Delete</button>
+                        <EventCard {...event} />
+                    </div>
+                ))}
+            </div>
 
-      {isModalOpen && (
-        <div
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            width: "100%",
-            height: "100%",
-            background: "rgba(0, 0, 0, 0.5)",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div
-            style={{ background: "#fff", padding: "20px", borderRadius: "8px" }}
-          >
-              <form onSubmit={handleSubmit}>
-                  <label>
-                      Title:
-                      <input type="text" name="title" value={formData.title} onChange={handleChange} required />
-                  </label>
+            {isModalOpen && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        background: "rgba(0, 0, 0, 0.5)",
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <div
+                        style={{ background: "#fff", padding: "20px", borderRadius: "8px" }}
+                    >
 
-                  <label>
-                      Content:
-                      <textarea name="content" value={formData.content} onChange={handleChange} required />
-                  </label>
+                        <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+                            <div className="flex flex-wrap -mx-3 mb-6">
+                                <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-first-name">
+                                        Nome do Evento
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
+                                           id="grid-first-name" type="text" placeholder="Culto ..." name="title"
+                                           value={formData.title} onChange={handleChange} required></input>
+                                </div>
+                                <div className="w-full md:w-1/2 px-3">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-last-name">
+                                        Data e Hora do Evento
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                           id="grid-last-name" type="text" placeholder="Dia 12 de Novembro ás 19h" name="labelDate" value={formData.labelDate} onChange={handleChange}></input>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap -mx-3 mb-6">
+                                <div className="w-full px-3">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-password">
+                                        Descricao do Evento
+                                    </label>
+                                    <textarea name="content" value={formData.content} onChange={handleChange} required />
+                                    <p className="text-gray-600 text-xs italic">Make it as long and as crazy as you'd like</p>
+                                </div>
+                            </div>
+                            <div className="flex flex-wrap -mx-3 mb-2">
+                                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
+                                        Endereço do Evento
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                           id="grid-city" type="text" placeholder="Rua..." name="address" value={formData.address} onChange={handleChange}></input>
+                                </div>
 
-                  <label>
-                      Label Date:
-                      <input type="text" name="labelDate" value={formData.labelDate} onChange={handleChange} />
-                  </label>
+                                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
+                                        URL do Vídeo
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                           id="grid-city" type="text" name="videoUrl" value={formData.videoUrl} onChange={handleChange}></input>
+                                </div>
+                                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-state">
+                                        Data do Evento
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                           id="grid-city" type="text" placeholder="02/10/2023" name="date" value={formData.date} onChange={handleChange}></input>
+                                </div>
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                                        É necessário se inscrever para participar
+                                    </label>
+                                    <input id="grid-zip"
+                                           type="checkbox"
+                                           name="isRequiredSubscription"
+                                           checked={formData.isRequiredSubscription}
+                                           onChange={handleChange}></input> Sim
+                                </div>
 
-                  <label>
-                      Address:
-                      <input type="text" name="address" value={formData.address} onChange={handleChange} />
-                  </label>
+                                <div class="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-zip">
+                                        Evento em Destaque
+                                    </label>
+                                    <input id="grid-zip"
+                                           type="checkbox"
+                                           name="isHighlighted"
+                                           checked={formData.isHighlighted}
+                                           onChange={handleChange}></input> Sim
+                                </div>
+                                <div className="w-full md:w-1/3 px-3 mb-6 md:mb-0">
+                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" htmlFor="grid-city">
+                                        Máximo de Participantes
+                                    </label>
+                                    <input className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                                           id="grid-city" type="number" name="maxRegistered"
+                                           value={formData.maxRegistered}
+                                           onChange={handleChange}></input>
+                                </div>
+                            </div>
+                            <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                                    type="submit">Cadastrar</button>
 
-                  <label>
-                      Date:
-                      <input type="text" name="date" value={formData.date} onChange={handleChange} />
-                  </label>
+                            <button className="mt-5" onClick={handleCloseModal}>
+                                Fechar
+                            </button>
+                        </form>
 
-                  <label>
-                      Is Required Subscription:
-                      <input
-                          type="checkbox"
-                          name="isRequiredSubscription"
-                          checked={formData.isRequiredSubscription}
-                          onChange={handleChange}
-                      />
-                  </label>
-
-                  <label>
-                      Max Registered:
-                      <input
-                          type="number"
-                          name="maxRegistered"
-                          value={formData.maxRegistered}
-                          onChange={handleChange}
-                      />
-                  </label>
-
-                  <label>
-                      Is Highlighted:
-                      <input
-                          type="checkbox"
-                          name="isHighlighted"
-                          checked={formData.isHighlighted}
-                          onChange={handleChange}
-                      />
-                  </label>
-
-                  <label>
-                      Image ID:
-                      <input type="text" name="imgId" value={formData.imgId} onChange={handleChange} />
-                  </label>
-
-                  <label>
-                      Video URL:
-                      <input type="text" name="videoUrl" value={formData.videoUrl} onChange={handleChange} />
-                  </label>
-
-                  <button type="submit">Submit</button>
-              </form>
-            <button class="mt-5" onClick={handleCloseModal}>
-              Fechar
-            </button>
-          </div>
-        </div>
-      )}
-    </>
-  );
+                    </div>
+                </div>
+            )}
+        </>
+    );
 }

@@ -81,7 +81,6 @@ const EventModal = ({ isOpen, onRequestClose, title, videoUrl, labelDate, addres
                                 </>
                             )}
                         </p>
-                        <p>{videoUrl}</p>
                         <EventTitle className="text-gray-900 font-bold text-xl mb-2">{title}</EventTitle>
                         <EventDescription className="text-gray-700 text-base">{description}</EventDescription>
                         {videoUrl ? (
