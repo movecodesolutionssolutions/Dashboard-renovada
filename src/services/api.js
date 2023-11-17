@@ -4,16 +4,16 @@ export const api = new axios.create({
   baseURL: "https://api-renovada-production.up.railway.app",
 });
 
-// api.interceptors.request.use(
-//   (config) => {
-//     const token = localStorage.getItem("@Permission:token");
+api.interceptors.request.use(
+  (config) => {
+    const token = localStorage.getItem("@Permission:token");
 
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   (error) => {
-//     return Promise.reject(error);
-//   }
-// );
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
