@@ -1,4 +1,5 @@
 import React, { useRef, useState } from "react";
+import * as yup from "yup";
 
 import Input from "../../components/Input";
 import Button from "../../components/Button";
@@ -6,7 +7,8 @@ import * as C from "./styles";
 import { Form } from "@unform/web";
 import { useAuth } from "../../context/auth";
 import { toast } from "react-toastify";
-import { useHistory } from "react-router-dom";
+import { useHistory, Link } from "react-router-dom";
+import { makeValidation } from "../../utils";
 
 export default function Login() {
   const { signIn, userLogged } = useAuth();
@@ -14,9 +16,18 @@ export default function Login() {
   const history = useHistory();
   const formRefLogin = useRef(null);
 
+  const validationSchemaLogin = yup.object().shape({
+    email: yup
+      .string()
+      .email("Digite um e-mail válido")
+      .required("O e-mail é obrigatório"),
+    password: yup.string().required("A senha é obrigatória"),
+  });
+
   if (userLogged()) {
     history.push("/users");
   }
+
   const toastOptions = {
     autoClose: 4000,
     position: toast.POSITION.TOP_CENTER,
@@ -25,13 +36,17 @@ export default function Login() {
   const handleSignIn = async (formData) => {
     setLoading(true);
 
+    const isValid = await makeValidation(
+      validationSchemaLogin,
+      formData,
+      formRefLogin
+    );
+
+    if (!isValid) {
+      return;
+    }
     const { email, password } = formData;
 
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      toast.info("Por favor, insira um e-mail válido.", toastOptions);
-      setLoading(false);
-    }
     const data = {
       email,
       password,
@@ -61,17 +76,17 @@ export default function Login() {
               onClick={() => formRefLogin.current.submitForm()}
             />
 
-            {/* <C.LabelSignup>
+            <C.LabelSignup>
               Não tem uma conta?
               <C.Strong>
-                <Link to="/signup">&nbsp;Registre-se</Link>
+                <Link to="/register">&nbsp;Registre-se</Link>
               </C.Strong>
             </C.LabelSignup>
             <C.LabelSignup>
               <C.Strong>
-                <Link to="/recocery">Esqueceu sua senha ?</Link>
+                <Link to="/recovery">Esqueceu sua senha ?</Link>
               </C.Strong>
-            </C.LabelSignup> */}
+            </C.LabelSignup>
           </C.Content>
         </C.Container>
       </Form>

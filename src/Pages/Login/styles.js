@@ -7,6 +7,7 @@ export const Container = styled.div`
   flex-direction: column;
   gap: 10px;
   height: 100vh;
+  background-color: #000;
 `;
 
 export const Content = styled.div`
@@ -16,11 +17,12 @@ export const Content = styled.div`
   justify-content: center;
   flex-direction: column;
   width: 100%;
-  box-shadow: 0 1px 2px #0003;
+  box-shadow: 0 1px 2px #fff3;
   background-color: white;
   max-width: 550px;
   padding: 20px;
   border-radius: 5px;
+  background: rgb(32, 32, 36);
 `;
 
 export const Label = styled.label`

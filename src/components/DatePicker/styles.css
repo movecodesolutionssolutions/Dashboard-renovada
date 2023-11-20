@@ -1,0 +1,43 @@
+.dark-datepicker {
+  width: 100%;
+  padding: 0.75rem;
+  font-size: 1rem;
+  color: #fff;
+  background-color: #000;
+  border-radius: 0.25rem;
+  outline: none;
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.dark-datepicker:hover {
+  background-color: #444;
+  border-color: #666;
+}
+
+.dark-datepicker:focus {
+  background-color: #555;
+  border-color: #777;
+}
+
+.react-datepicker-wrapper {
+  width: 95%;
+
+}
+
+.flex-col {
+  flex-direction: column;
+  width: 99%;
+  margin-top: -2px;
+  margin-left: 16px;
+}
+
+.react-datepicker {
+  font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+  font-size: 0.8rem;
+  background-color: #fff;
+  color: #000;
+  border: 1px solid #aeaeae;
+  border-radius: 0.3rem;
+  display: inline-block;
+  position: relative;
+}
