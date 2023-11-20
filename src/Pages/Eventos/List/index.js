@@ -225,7 +225,7 @@ export default function EventsList() {
                 style={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    marginBottom: "10px",
+                    backgroundColor: "#000",
                 }}
             >
                 <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
@@ -233,16 +233,23 @@ export default function EventsList() {
                 </button>
             </div>
 
-            <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))", gap: "10px"}}>
+            <div style={{display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
+                gap: "10px", backgroundColor: "#000", height: "100vh",
+            }}>
                 {events.map((event) => (
                     <div key={event.id}>
-                        <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                                onClick={() => handleOpenModal(event.id)}>Editar Evento
-                        </button>
-
-                        <button className="bg-red-500 text-blue-50" onClick={() => handleDeleteEvent(event.id)}>Delete
-                        </button>
-                        <EventCard {...event} />
+                        <EventCard  title={event.title}
+                                    content={event.content}
+                                    labelDate={event.labelDate}
+                                    address={event.address}
+                                    date={event.date}
+                                    isRequiredSubscription={event.isRequiredSubscription}
+                                    maxRegistered={event.maxRegistered}
+                                    isHighlighted={event.isHighlighted}
+                                    img={event.img}
+                                    videoUrl={event.videoUrl}
+                                    onEdit={() => handleOpenModal(event.id)}
+                                    onDelete={() => handleDeleteEvent(event.id)} />
                     </div>
                 ))}
             </div>
@@ -259,6 +266,7 @@ export default function EventsList() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
+
                     }}
                 >
                     <div

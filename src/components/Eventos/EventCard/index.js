@@ -8,8 +8,9 @@ const CardContainer = styled.div`
   border: 1px solid #ddd;
   border-radius: 8px;
   padding: 16px;
-  margin:10px;
+  margin: 10px;
   width: 300px;
+  height: 650px; /* Defina a altura fixa para os cards */
 `;
 
 const EventTitle = styled.h2`
@@ -46,7 +47,17 @@ const ViewMoreButton = styled.button`
   cursor: pointer;
 `;
 
-const EventCard = ({ title, videoUrl, address, content, img,isRequiredSubscription, labelDate, maxRegistered, price }) => {
+const CardImage = styled.img`
+  width: 100%; /* Ajusta a largura para ocupar 100% do contêiner */
+  height: 200px; /* Define uma altura fixa para a imagem */
+  object-fit: cover; /* Mantém a proporção da imagem e cobre o contêiner */
+`;
+
+const EventCard = ({
+                       title, videoUrl, address, content, img, isRequiredSubscription,
+                       labelDate, maxRegistered, price, onEdit,
+                       onDelete
+                   }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const openModal = () => {
@@ -63,19 +74,39 @@ const EventCard = ({ title, videoUrl, address, content, img,isRequiredSubscripti
         <CardsContainer>
             <CardContainer>
                 <div className="max-w-sm rounded overflow-hidden shadow-lg">
-                    <img className="w-full" src={displayImage} alt={title} />
+                    <CardImage className="w-full" src={displayImage} alt={title}/>
                     <div className="px-6 py-4">
-                        <div className="font-bold text-xl mb-2">{title}</div>
-                        <p className="text-gray-700 text-base overflow-hidden line-clamp-3">{content}</p>
+                        <div className="font-bold text-xl mb-2 text-gray-500">{title}</div>
+                    </div>
+                    <div className="px-6 py-4">
+                        <p className="text-gray-700 text-base overflow-hidden line-clamp-3 text-white">{content}</p>
                     </div>
                     <div className="px-6 pt-4 pb-2">
-            <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+            <span
+                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 ">
               {labelDate}
             </span>
-                        <span className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                        <span
+                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
               {address}
             </span>
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={openModal}>Ver Mais</button>
+                        <div className="pt-2">
+                            <button
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold m-1 py-2 px-4 rounded mr-2"
+                                onClick={() => onEdit()}>
+                                Editar
+                            </button>
+                            <button
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 m-1 px-4 rounded mr-2"
+                                onClick={() => onDelete()}>
+                                Excluir
+                            </button>
+                            <button
+                                className="bg-blue-500 hover:bg-blue-700 w-full flex-grow text-white font-bold m-1 py-2 px-4 rounded"
+                                onClick={openModal}>
+                                Ver Mais
+                            </button>
+                        </div>
                     </div>
                 </div>
             </CardContainer>
@@ -89,7 +120,7 @@ const EventCard = ({ title, videoUrl, address, content, img,isRequiredSubscripti
                 description={content}
                 img={img}
                 isRequiredSubscription={isRequiredSubscription}
-                videoUrl = {videoUrl}
+                videoUrl={videoUrl}
             />
         </CardsContainer>
     );
