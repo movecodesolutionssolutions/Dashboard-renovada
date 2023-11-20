@@ -21,7 +21,7 @@ const HamburgerMenu = ({ isOpen, toggleMenu }) => {
     <>
       <MenuContainer isOpen={isOpen}>
         <HamburgerButton onClick={closeMenu}>
-          <FaTimes color="#000" /> {/* Ícone para fechar o menu */}
+          <FaTimes color="#000" />
         </HamburgerButton>
         <MenuItems>
           <MenuItem>

@@ -8,6 +8,7 @@ export const Container = styled.div`
   gap: 10px;
   height: 100vh;
   width: 100%;
+  background-color: #000;
 `;
 
 export const Content = styled.div`
@@ -22,6 +23,7 @@ export const Content = styled.div`
   max-width: 450px;
   padding: 20px;
   border-radius: 5px;
+  background: rgb(32, 32, 36);
 `;
 
 export const Label = styled.label`

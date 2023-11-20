@@ -8,6 +8,7 @@ import User from '../Pages/Users';
 import PrivateRoutes from './PriveteRoutes';
 import Header from '../components/Header';
 import EventsList from '../Pages/Eventos/List';
+import RecoveryLink from '../Pages/RecoveryLink';
 
 const HeaderWrapper = () => {
   const location = useLocation();
@@ -25,6 +26,7 @@ const Routes = () => {
         <Route path="/" exact component={Login} />
         <Route path="/register" exact component={Registre} />
         <Route path="/recovery" exact component={Recovery} />
+        <Route path="/recover" exact component={RecoveryLink} />
         <PrivateRoutes path="/users" component={User} />
         <PrivateRoutes path="/events/list" component={EventsList} />
       </Switch>
