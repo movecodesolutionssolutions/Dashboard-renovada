@@ -13,6 +13,14 @@ const ModalContainer = styled(Modal)`
   outline: none;
   width: 80%;
   height: 90%;
+
+  body.ReactModal__Body--open {
+    overflow: hidden;
+  }
+
+  .ReactModal__Overlay.ReactModal__Overlay--after-open {
+    background-color: rgba(0, 0, 0, 0.5); /* Substitua pela cor desejada */
+  }
 `;
 
 const EventTitle = styled.h2`

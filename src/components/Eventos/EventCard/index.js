@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
-import Modal from 'react-modal';
+
 import WorshipImage from '../../../images/eventos/worship.jpeg';
 import EventModal from "../EventModal";
 
@@ -47,6 +47,12 @@ const ViewMoreButton = styled.button`
   cursor: pointer;
 `;
 
+const TruncatedTextContainer = styled.div`
+  height: 100px; /* Defina a altura fixa desejada */
+  overflow: hidden;
+  text-align: justify;
+`;
+
 const CardImage = styled.img`
   width: 100%; /* Ajusta a largura para ocupar 100% do contêiner */
   height: 200px; /* Define uma altura fixa para a imagem */
@@ -78,31 +84,32 @@ const EventCard = ({
                     <div className="px-6 py-4">
                         <div className="font-bold text-xl mb-2 text-gray-500">{title}</div>
                     </div>
-                    <div className="px-6 py-4">
+                    <TruncatedTextContainer>
                         <p className="text-gray-700 text-base overflow-hidden line-clamp-3 text-white">{content}</p>
-                    </div>
-                    <div className="px-6 pt-4 pb-2">
-            <span
-                className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 ">
+                    </TruncatedTextContainer>
+                    <div className="px-5 pt-4 pb-2">
+
+                        <span
+                            className="inline-block bg-gray-200 rounded w-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2 ">
               {labelDate}
             </span>
                         <span
-                            className="inline-block bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
+                            className="inline-block bg-gray-200 rounded w-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">
               {address}
             </span>
                         <div className="pt-2">
                             <button
-                                className="bg-green-500 hover:bg-green-700 text-white font-bold m-1 py-2 px-4 rounded mr-2"
+                                className="bg-green-500 hover:bg-green-700 text-white font-bold m-1 py-2 px-8 rounded"
                                 onClick={() => onEdit()}>
                                 Editar
                             </button>
                             <button
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 m-1 px-4 rounded mr-2"
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 m-1 px-7 rounded"
                                 onClick={() => onDelete()}>
                                 Excluir
                             </button>
                             <button
-                                className="bg-blue-500 hover:bg-blue-700 w-full flex-grow text-white font-bold m-1 py-2 px-4 rounded"
+                                className="bg-blue-500 hover:bg-blue-700 text-white px-20 font-bold m-1 py-2 rounded"
                                 onClick={openModal}>
                                 Ver Mais
                             </button>
