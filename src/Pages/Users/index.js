@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useAuth } from "../../context/auth";
 import Modal from "../../components/Modal";
-import ImageInput from "../../components/ImageInput";
+import formatarData from "../../utils";
 import Input from "../../components/Input";
 import Checkbox from "../../components/CheckBox";
 import { Form } from "@unform/web";
@@ -10,7 +10,7 @@ import { api } from "../../services/api";
 import { toast } from "react-toastify";
 
 const User = () => {
-  const { acountComplet, setAcountComplet, User } = useAuth();
+  const { acountComplet, setAcountComplet, user } = useAuth();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isVisitor, setIsVisitor] = useState(true);
   const [isShepherd, setIsShepherd] = useState(true);
@@ -30,52 +30,58 @@ const User = () => {
   };
 
   useEffect(() => {
-    if (acountComplet) {
+    if (acountComplet == false) {
       openModal();
     }
   }, [acountComplet]);
 
-  const handleImageSelect = (image) => {
-    // Handle the selected image in the parent component
-    setSelectedImage(image);
+  const handleImageChange = (e) => {
+    setSelectedImage(e.target.files[0]);
   };
 
   const handleCompletRegister = async (formData) => {
     const { phone, address } = formData;
+
     try {
-      // Convert the selected image to a base64-encoded string
-      const base64Image = selectedImage.split(",")[1];
+      let imgId = formData.imgId;
 
-      // Upload the base64-encoded image string
-      const responseImage = await api.post("/image/upload", {
-        image: base64Image,
+      if (selectedImage) {
+        const formDataImage = new FormData();
+        formDataImage.append("file", selectedImage);
+
+        const responseImage = await api.post("/image/upload", formDataImage);
+        imgId = responseImage.data.id;
+      }
+
+      const birthday = formatarData(user.birthday);
+
+      const responseUserUpdate = await api.put("/user/me", {
+        name: user.name,
+        roles: user.roles,
+        avatar: imgId,
+        gender: user.gender,
+        birthday: birthday,
+        email: user.email,
+        phone: phone,
+        address: address,
+        isVisitor: isVisitor,
+        isShepherd: isShepherd,
+        isAcceptedJesus: isAcceptedJesus,
+        isBaptized: isBaptized,
+        isCompleted: true,
       });
-      console.log(responseImage);
 
-      // Now, you can use the response from the image upload to get the image path or other details
-      const imagePath = responseImage.data.path;
-
-      // Now, you can use the response from the image upload to get the image path or other details
-      // const imagePath = responseImage.data.path;
-
-      // const reponse = api.puth("/user/me", {
-      //   name: User.name,
-      //   roles: User.roles,
-      //   avatar: "string",
-      //   gender: User.gender,
-      //   birthday: User.birthday,
-      //   email: User.email,
-      //   phone: phone,
-      //   address: address,
-      //   isVisitor: isVisitor,
-      //   isShepherd: isShepherd,
-      //   isAcceptedJesus: isAcceptedJesus,
-      //   isBaptized: isBaptized,
-      //   isCompleted: true,
-      // });
-      toast.success("Cadastro completo!");
+      if (responseUserUpdate.status === 200) {
+        toast.success("Cadastro completo!");
+      } else {
+        toast.error(
+          "Erro ao concluir cadastro. Motivo: Atualização do usuário falhou."
+        );
+      }
     } catch (error) {
-      console.log("Erro ao concluir cadastro. Motivo" + error);
+      toast.error("Erro ao concluir cadastro. Motivo: " + error.message);
+    } finally {
+      closeModal();
     }
   };
 
@@ -110,7 +116,21 @@ const User = () => {
           </div>
 
           <div className="mb-6">
-            <ImageInput onImageSelect={handleImageSelect} />
+            <div className="relative mt-4">
+              <label
+                htmlFor="imageUpload"
+                className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full block w-full text-center"
+              >
+                Escolher Imagem para seu perfil
+              </label>
+              <input
+                id="imageUpload"
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={handleImageChange}
+              />
+            </div>
           </div>
           <Button
             Text="Enviar"

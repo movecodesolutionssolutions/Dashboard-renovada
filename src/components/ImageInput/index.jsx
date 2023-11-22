@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-const ImageInput = () => {
+const ImageInput = ({ onImageSelect }) => {
   const [selectedImage, setSelectedImage] = useState(null);
 
   const handleImageUpload = (e) => {
@@ -11,6 +11,7 @@ const ImageInput = () => {
 
       reader.onloadend = () => {
         setSelectedImage(reader.result);
+        onImageSelect(reader.result); // Notifica o componente pai sobre a imagem selecionada
       };
 
       reader.readAsDataURL(file);
@@ -18,23 +19,27 @@ const ImageInput = () => {
   };
 
   return (
-    <div className="flex items-center justify-center">
-      <label className="relative cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full">
-        Upload imagem
-        <input
-          type="file"
-          className="hidden"
-          onChange={handleImageUpload}
-          accept="image/*"
-        />
+    <div className="mt-4">
+      <label
+        htmlFor="imageUpload"
+        className="cursor-pointer bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-full block w-full text-center"
+      >
+        Escolher Imagem
       </label>
+      <input
+        id="imageUpload"
+        type="file"
+        accept="image/*"
+        className="hidden"
+        onChange={handleImageUpload}
+      />
 
       {selectedImage && (
-        <div className="ml-4">
+        <div className="mt-4">
           <img
             src={selectedImage}
             alt="Uploaded"
-            className="rounded-md max-h-32"
+            className="rounded-md max-h-32 mx-auto"
           />
         </div>
       )}
