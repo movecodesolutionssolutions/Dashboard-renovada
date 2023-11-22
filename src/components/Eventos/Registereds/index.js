@@ -13,7 +13,7 @@ const UserItem = styled.div`
 const Registereds = ({ users }) => {
     if (!users || users.length === 0) {
         // If users is undefined or an empty array, you can return a message or null
-        return <UserListContainer>            <h3>Usuários Cadastrados:</h3>
+        return <UserListContainer style={{color: "white"}}>            <h3 className="text-white">Usuários Cadastrados:</h3>
             Nenhuma Inscrição</UserListContainer>;
     }
 

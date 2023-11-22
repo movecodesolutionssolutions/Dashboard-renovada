@@ -143,7 +143,6 @@ export default function EventsList() {
             imgId: imgId, // Atualiza o campo imgId com o novo ID da imagem
             videoUrl: newFormData.get("videoUrl"),
         };
-        console.log(newEvent);
 
         try {
             if (editingEventId) {
@@ -160,7 +159,7 @@ export default function EventsList() {
 
 
     const handleChange = (e) => {
-        const { name, value, type, checked } = e.target;
+        const {name, value, type, checked} = e.target;
 
         // Verifica se o campo é o campo de data
         if (name === "date") {
@@ -210,6 +209,8 @@ export default function EventsList() {
 
     const handleUpdateEvent = async (eventId, updatedEvent) => {
         try {
+            console.log(updatedEvent);
+
             if (isEditingImage) {
                 const formDataImage = new FormData();
                 formDataImage.append("file", imageFile);
@@ -283,7 +284,9 @@ export default function EventsList() {
                                    price={event.price}
                                    videoUrl={event.videoUrl}
                                    onEdit={() => handleOpenModal(event.id)}
-                                   onDelete={() => handleDeleteEvent(event.id)}/>
+                                   onDelete={() => handleDeleteEvent(event.id)}
+                                   subscribers={event.SubscribersEvent} // Pass the subscribers array here
+/>
                     </div>
                 ))}
             </div>
@@ -304,7 +307,8 @@ export default function EventsList() {
                     }}
                 >
                     <div
-                        style={{background: "#fff", padding: "20px", borderRadius: "8px"
+                        style={{
+                            background: "#fff", padding: "20px", borderRadius: "8px"
                         }}
                     >
 
@@ -330,7 +334,8 @@ export default function EventsList() {
                                     <input
                                         className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                                         id="grid-last-name" type="text" placeholder="Dia 12 de Novembro ás 19h"
-                                        name="labelDate" value={formData.labelDate} onChange={handleChange} required></input>
+                                        name="labelDate" value={formData.labelDate} onChange={handleChange}
+                                        required></input>
                                 </div>
                             </div>
                             <div className="flex flex-wrap -mx-3 mb-6">
@@ -380,32 +385,41 @@ export default function EventsList() {
                                         htmlFor="grid-zip">
                                         É necessário se inscrever para participar
                                     </label>
-
-                                    <select id="isRequiredSubscription" name="isRequiredSubscription" autoComplete="country-name"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
-                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                                focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                            required>
-                                        <option value={formData.isRequiredSubscription} onChange={handleChange}> Sim</option>
-                                        <option value="" selected> Não</option>
+                                    <select
+                                        id="isRequiredSubscription"
+                                        name="isRequiredSubscription"
+                                        autoComplete="country-name"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+             ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+             focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                        required
+                                        onChange={handleChange} >
+                                        <option value="true" selected={formData.isRequiredSubscription === true}>Sim</option>
+                                        <option value="" selected={formData.isRequiredSubscription === false}>Não</option>
                                     </select>
                                 </div>
 
                                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-                                    <label className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-                                           htmlFor="grid-zip">
+                                    <label
+                                        className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
+                                        htmlFor="grid-zip">
                                         O Evento deverá ficar em Destaque?
                                     </label>
 
-
-                                    <select id="isHighlighted" name="isHighlighted" autoComplete="country-name"
-                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
-                                ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
-                                focus:ring-blue-600 sm:text-sm sm:leading-6"
-                                            required>
-                                        <option value={formData.isHighlighted} onChange={handleChange}> Sim</option>
-                                        <option value="" selected> Não</option>
+                                    <select
+                                        id="isHighlighted"
+                                        name="isHighlighted"
+                                        autoComplete="country-name"
+                                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1
+             ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset
+             focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                        required
+                                        onChange={handleChange}
+                                    >
+                                        <option value="true" selected={formData.isHighlighted === true}>Sim</option>
+                                        <option value="" selected={formData.isHighlighted === false}>Não</option>
                                     </select>
+
                                 </div>
                             </div>
 
@@ -456,7 +470,8 @@ export default function EventsList() {
                                            autoComplete="given-name" accept="image/*"
                                            className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm
                                ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2
-                               focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6" onChange={handleImageChange}/>
+                               focus:ring-inset focus:ring-blue-600 sm:text-sm sm:leading-6"
+                                           onChange={handleImageChange}/>
                                 </div>
                             </div>
 

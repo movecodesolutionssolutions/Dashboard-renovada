@@ -62,7 +62,7 @@ const CardImage = styled.img`
 const EventCard = ({
                        title, videoUrl, address, content, img, isRequiredSubscription,
                        labelDate, maxRegistered, price, onEdit,
-                       onDelete
+                       onDelete, subscribers
                    }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -128,6 +128,7 @@ const EventCard = ({
                 img={img}
                 isRequiredSubscription={isRequiredSubscription}
                 videoUrl={videoUrl}
+                subscribers = {subscribers}
             />
         </CardsContainer>
     );
