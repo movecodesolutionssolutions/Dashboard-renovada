@@ -76,12 +76,12 @@ export default function Login() {
               onClick={() => formRefLogin.current.submitForm()}
             />
 
-            <C.LabelSignup>
+            {/* <C.LabelSignup>
               Não tem uma conta?
               <C.Strong>
                 <Link to="/register">&nbsp;Registre-se</Link>
               </C.Strong>
-            </C.LabelSignup>
+            </C.LabelSignup> */}
             <C.LabelSignup>
               <C.Strong>
                 <Link to="/recovery">Esqueceu sua senha ?</Link>
