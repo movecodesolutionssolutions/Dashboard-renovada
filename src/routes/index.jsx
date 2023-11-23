@@ -8,12 +8,13 @@ import User from '../Pages/Users';
 import PrivateRoutes from './PriveteRoutes';
 import Header from '../components/Header';
 import EventsList from '../Pages/Eventos/List';
+import SermonList from "../Pages/Sermoes";
 import RecoveryLink from '../Pages/RecoveryLink';
 import News from "../Pages/News";
 
 const HeaderWrapper = () => {
   const location = useLocation();
-  const routesWithHeader = ["/users", "/events/list", "/news"];
+  const routesWithHeader = ["/users", "/events/list", "/news", "/sermon/list"];
   const shouldRenderHeader = routesWithHeader.includes(location.pathname);
 
   return shouldRenderHeader ? <Header /> : null;
@@ -30,6 +31,7 @@ const Routes = () => {
         <Route path="/recover" exact component={RecoveryLink} />
         <PrivateRoutes path="/users" component={User} />
         <PrivateRoutes path="/events/list" component={EventsList} />
+        <PrivateRoutes path="/sermon/list" component={SermonList} />
         <PrivateRoutes path="/news" component={News} />
       </Switch>
     </BrowserRouter>
