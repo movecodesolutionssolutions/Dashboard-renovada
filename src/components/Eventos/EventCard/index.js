@@ -9,8 +9,9 @@ const CardContainer = styled.div`
   border-radius: 8px;
   padding: 16px;
   margin: 10px;
+  margin-bottom: 30px;
   width: 300px;
-  height: 650px; /* Defina a altura fixa para os cards */
+  height: 630px; /* Defina a altura fixa para os cards */
 `;
 
 const EventTitle = styled.h2`
@@ -62,7 +63,7 @@ const CardImage = styled.img`
 const EventCard = ({
                        title, videoUrl, address, content, img, isRequiredSubscription,
                        labelDate, maxRegistered, price, onEdit,
-                       onDelete, subscribers
+                       onDelete, subscribers, eventId
                    }) => {
     const [modalIsOpen, setModalIsOpen] = useState(false);
 
@@ -129,6 +130,7 @@ const EventCard = ({
                 isRequiredSubscription={isRequiredSubscription}
                 videoUrl={videoUrl}
                 subscribers = {subscribers}
+                EventId={eventId}
             />
         </CardsContainer>
     );

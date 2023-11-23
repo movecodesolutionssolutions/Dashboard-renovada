@@ -1,10 +1,12 @@
 import React, {useEffect, useState} from "react";
 import EventCard from "../../../components/Eventos/EventCard";
+import { toast } from "react-toastify";
 import {api} from "../../../services/api.js"
 
 
 export default function EventsList() {
     const [events, setEvents] = useState([]);
+    const [users, setUsers] = useState([]);
 
     const [editingEventId, setEditingEventId] = useState(null);
     const [isEditingImage, setIsEditingImage] = useState(false); // Novo estado para controlar a edição da imagem
@@ -27,6 +29,11 @@ export default function EventsList() {
     });
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [imageFile, setImageFile] = useState(null); // Novo estado para armazenar o arquivo de imagem
+
+    const toastOptions = {
+        autoClose: 4000,
+        position: toast.POSITION.TOP_CENTER,
+    };
 
     const handleImageChange = (e) => {
         setImageFile(e.target.files[0]);
@@ -109,8 +116,9 @@ export default function EventsList() {
 
             // Close the modal
             handleCloseModal();
+            toast.success("Evento cadastrado com sucesso", toastOptions);
         } catch (error) {
-            console.error("Error adding event:", error);
+            toast.error("Não foi possível adicionar evento", toastOptions);
         }
     };
 
@@ -193,11 +201,12 @@ export default function EventsList() {
 
             // Fetch the updated list of events
             handleGetEvents();
+            toast.success("Evento excluído com sucesso", toastOptions);
 
             // Close the deletion confirmation modal
             setIsDeleteConfirmationOpen(false);
         } catch (error) {
-            console.error(`Error deleting event with ID ${eventToDeleteId}:`, error);
+            toast.error("Não foi possível deletar evento", toastOptions);
         }
     };
 
@@ -241,12 +250,12 @@ export default function EventsList() {
             });
             setEditingEventId(null);
             setIsEditingImage(false);
+            toast.success("Evento alterado com sucesso", toastOptions);
             handleCloseModal();
         } catch (error) {
-            console.error(`Error updating event with ID ${eventId}:`, error);
+            toast.error("Erro ao editar evento", toastOptions);
         }
     };
-
 
     return (
         <>
@@ -267,8 +276,8 @@ export default function EventsList() {
                 gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
                 gap: "10px",
                 backgroundColor: "#000",
-                height: "100vh", // Altura fixa para a área de eventos
-                overflowY: "auto", // Adiciona barra de rolagem vertical quando necessário
+                height: "85%", // Altura fixa para a área de eventos
+                overflowY: "auto"
             }}>
                 {events.map((event) => (
                     <div key={event.id}>
@@ -283,6 +292,7 @@ export default function EventsList() {
                                    img={event.img}
                                    price={event.price}
                                    videoUrl={event.videoUrl}
+                                   eventId = {event.id}
                                    onEdit={() => handleOpenModal(event.id)}
                                    onDelete={() => handleDeleteEvent(event.id)}
                                    subscribers={event.SubscribersEvent} // Pass the subscribers array here
@@ -295,7 +305,7 @@ export default function EventsList() {
                 <div
                     style={{
                         position: "fixed",
-                        top: 0,
+                        top: 10,
                         left: 0,
                         width: "100%",
                         height: "100%",
@@ -303,16 +313,22 @@ export default function EventsList() {
                         display: "flex",
                         justifyContent: "center",
                         alignItems: "center",
-
                     }}
                 >
                     <div
                         style={{
-                            background: "#fff", padding: "20px", borderRadius: "8px"
+                            background: "#fff", padding: "20px", borderRadius: "8px",
+                            height: "90%",
+                            overflowY: "auto"
                         }}
                     >
 
-                        <form className="w-full max-w-lg" onSubmit={handleSubmit}>
+                        <form className="w-full max-w-lg" onSubmit={handleSubmit}
+                              style={{
+                                  background: "#fff", padding: "20px", borderRadius: "8px",
+                                  width: "100%",
+                                  height: "100%",
+                              }}>
                             <div className="flex flex-wrap -mx-3 mb-6">
                                 <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
                                     <label
