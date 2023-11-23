@@ -34,9 +34,9 @@ const AuthProvider = ({ children }) => {
 
     setToken(token);
     setUser(user);
-    if (user.isCompleted == false) {
-      setAcountComplet(false);
-    }
+    // if (user.isCompleted == false) {
+    //   setAcountComplet(false);
+    // }
     localStorage.setItem("@Permission:token", token);
     localStorage.setItem("@User:user", JSON.stringify(user));
   }, []);
@@ -64,7 +64,6 @@ const AuthProvider = ({ children }) => {
     []
   );
   const signOut = () => {
-    console.log("Chamou");
     setToken({});
     setUser(null);
     setAcountComplet(true);
