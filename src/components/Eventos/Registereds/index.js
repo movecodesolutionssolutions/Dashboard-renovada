@@ -1,5 +1,5 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react";
+import styled from "styled-components";
 
 const UserListContainer = styled.div`
   margin-top: 20px;
@@ -11,20 +11,25 @@ const UserItem = styled.div`
 `;
 
 const Registereds = ({ users }) => {
-    if (!users || users.length === 0) {
-        // If users is undefined or an empty array, you can return a message or null
-        return <UserListContainer>            <h3>Usuários Cadastrados:</h3>
-            Nenhuma Inscrição</UserListContainer>;
-    }
-
+  if (!users || users.length === 0) {
+    // If users is undefined or an empty array, you can return a message or null
     return (
-        <UserListContainer>
-            <h3>Usuários Cadastrados:</h3>
-            {users.map((user, index) => (
-                <UserItem key={index}>{user.name}</UserItem>
-            ))}
-        </UserListContainer>
+      <UserListContainer>
+        {" "}
+        <h3>Usuários Cadastrados:</h3>
+        Nenhuma Inscrição
+      </UserListContainer>
     );
+  }
+
+  return (
+    <UserListContainer>
+      <h3>Usuários Cadastrados:</h3>
+      {users.map((user, index) => (
+        <UserItem key={index}>{user.name}</UserItem>
+      ))}
+    </UserListContainer>
+  );
 };
 
 export default Registereds;

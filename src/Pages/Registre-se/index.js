@@ -59,7 +59,7 @@ const Registre = () => {
     try {
       await register(data);
       toast.success("Usuário cadastrado com sucesso!");
-      history.push("/users");
+      history.push("/news");
     } catch (err) {
       toast.error("Ocorreu um erro ao criar usuáro. Motivo" + err);
     } finally {

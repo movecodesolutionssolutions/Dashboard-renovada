@@ -53,7 +53,7 @@ export default function Login() {
     };
     try {
       await signIn(data);
-      history.push("/users");
+      history.push("/news");
     } catch (error) {
       toast.info("Falha no login. Verifique suas credenciais.", toastOptions);
     } finally {
