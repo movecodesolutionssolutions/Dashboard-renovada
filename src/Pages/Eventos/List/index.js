@@ -2,6 +2,7 @@ import React, {useEffect, useState} from "react";
 import EventCard from "../../../components/Eventos/EventCard";
 import { toast } from "react-toastify";
 import {api} from "../../../services/api.js"
+import Spinner from "../../../components/Spiner";
 
 
 export default function EventsList() {
@@ -10,6 +11,8 @@ export default function EventsList() {
 
     const [editingEventId, setEditingEventId] = useState(null);
     const [isEditingImage, setIsEditingImage] = useState(false); // Novo estado para controlar a edição da imagem
+
+    const [loading, setLoading] = useState(false);
 
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
     const [eventToDeleteId, setEventToDeleteId] = useState(null);
@@ -108,6 +111,9 @@ export default function EventsList() {
 
     const handleAddEvent = async (newEvent) => {
         try {
+            setLoading(true);
+            handleCloseModal();
+
             // Send a POST request to create a new event
             await api.post("/event", newEvent);
 
@@ -115,10 +121,11 @@ export default function EventsList() {
             handleGetEvents();
 
             // Close the modal
-            handleCloseModal();
             toast.success("Evento cadastrado com sucesso", toastOptions);
         } catch (error) {
             toast.error("Não foi possível adicionar evento", toastOptions);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -196,17 +203,18 @@ export default function EventsList() {
 
     const confirmDeleteEvent = async () => {
         try {
-            // Send a DELETE request to delete the event
+            setLoading(true);
+            setIsDeleteConfirmationOpen(false);
+
             await api.delete(`/event/${eventToDeleteId}`);
 
-            // Fetch the updated list of events
             handleGetEvents();
             toast.success("Evento excluído com sucesso", toastOptions);
 
-            // Close the deletion confirmation modal
-            setIsDeleteConfirmationOpen(false);
         } catch (error) {
             toast.error("Não foi possível deletar evento", toastOptions);
+        }finally {
+            setLoading(false);
         }
     };
 
@@ -218,7 +226,8 @@ export default function EventsList() {
 
     const handleUpdateEvent = async (eventId, updatedEvent) => {
         try {
-            console.log(updatedEvent);
+            setLoading(true);
+            handleCloseModal();
 
             if (isEditingImage) {
                 const formDataImage = new FormData();
@@ -251,21 +260,23 @@ export default function EventsList() {
             setEditingEventId(null);
             setIsEditingImage(false);
             toast.success("Evento alterado com sucesso", toastOptions);
-            handleCloseModal();
         } catch (error) {
             toast.error("Erro ao editar evento", toastOptions);
+        }finally {
+            setLoading(false);
         }
     };
 
     return (
-        <>
+        <div className="bg-gray-800 min-h-screen overflow-y-auto max-h-screen h-full">
             <div
+                className="bg-gray-800"
                 style={{
                     display: "flex",
                     justifyContent: "flex-end",
-                    backgroundColor: "#000"
                 }}
             >
+                {loading && <Spinner />}
                 <button className="bg-blue-500 m-5 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => handleOpenModal()}>Adicionar Evento
                 </button>
@@ -275,9 +286,6 @@ export default function EventsList() {
                 display: "grid",
                 gridTemplateColumns: "repeat(auto-fill, minmax(300px, 1fr))",
                 gap: "10px",
-                backgroundColor: "#000",
-                height: "85%", // Altura fixa para a área de eventos
-                overflowY: "auto"
             }}>
                 {events.map((event) => (
                     <div key={event.id}>
@@ -296,7 +304,7 @@ export default function EventsList() {
                                    onEdit={() => handleOpenModal(event.id)}
                                    onDelete={() => handleDeleteEvent(event.id)}
                                    subscribers={event.SubscribersEvent} // Pass the subscribers array here
-/>
+                        />
                     </div>
                 ))}
             </div>
@@ -544,6 +552,6 @@ export default function EventsList() {
                     </div>
                 </div>
             )}
-        </>
+        </div>
     );
 }

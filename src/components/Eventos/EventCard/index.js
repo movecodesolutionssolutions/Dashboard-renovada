@@ -79,7 +79,7 @@ const EventCard = ({
 
     return (
         <CardsContainer>
-            <CardContainer>
+            <CardContainer className="bg-gray-900">
                 <div className="max-w-sm rounded overflow-hidden shadow-lg">
                     <CardImage className="w-full" src={displayImage} alt={title}/>
                     <div className="px-6 py-4">
